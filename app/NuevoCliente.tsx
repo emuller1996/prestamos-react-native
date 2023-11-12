@@ -10,58 +10,60 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
+  ToastAndroid,
   TouchableWithoutFeedback,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { getAllClientesRedux } from "../redux/reducers/clientSlice";
 import { getAllClientesService } from "../services/clientes";
 import { useAppDispatch } from "../hooks/useAppDispatch";
+import { useForm, Controller } from "react-hook-form";
+import FormClientes from "../components/FormClientes";
+
 
 export default function NuevoClienteScreen() {
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState("");
   const dispatch = useAppDispatch();
 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
+  });
+
   const onSubmit = async () => {
     console.log({ nombre: text, numero_telefonico: number });
 
-    try {
-      const r = await axios.post(
-        "https://prestamos-app-nextapp.vercel.app/api/clientes",
-        {
-          nombre: text,
-          numero_telefonico: number,
-        }
-      );
-      Alert.alert("Cliente Registrado");
-      dispatch(getAllClientesRedux());
-    } catch (error) {
-      console.log(error);
-    }
+    
+
+      try {
+        ToastAndroid.show('A pikachu appeared nearby !',  ToastAndroid.SHORT);
+        /* const r = await axios.post(
+          "https://prestamos-app-nextapp.vercel.app/api/clientes",
+          {
+            nombre: text,
+            numero_telefonico: number,
+          }
+        );
+        Alert.alert("Cliente Registrado");
+        dispatch(getAllClientesRedux()); */
+      } catch (error) {
+        console.log(error);
+      }
+    
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Crear Cliete</Text>
 
-      <SafeAreaView style={styles.form}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeText}
-          value={text}
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeNumber}
-          value={number}
-        />
-
-        <TouchableWithoutFeedback onPress={onSubmit}>
-          <View style={styles.button}>
-            <Text> Guardar</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </SafeAreaView>
+      <FormClientes cliente={null} />
     </View>
   );
 }
@@ -69,6 +71,7 @@ export default function NuevoClienteScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F1FFF1",
   },
   title: {
     fontSize: 20,
@@ -87,22 +90,26 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    backgroundColor: "#4855DE",
+    backgroundColor: "#025504",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    color: "#F9F9F9",
+    color: "#D3FFD5",
+
     textAlign: "center",
     borderWidth: 2,
-    borderColor: "#1026FF",
-
+    borderColor: "#D3FFD5",
     shadowColor: "#000",
     shadowOffset: {
-      width: 0,
-      height: 5,
+      width: 2,
+      height: 2,
     },
-    shadowOpacity: 0.95,
-    shadowRadius: 16.0,
+    shadowOpacity: 0.35,
+    shadowRadius: 2.0,
 
     elevation: 10,
+  },
+  buttonText: {
+    fontSize: 15,
+    color: "#D3FFD5",
   },
 });

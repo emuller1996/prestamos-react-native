@@ -3,27 +3,26 @@ import React, { useEffect, useState } from "react";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import { useDispatch, useSelector } from "react-redux";
-import { FlatList } from "react-native";
+import { FlatList, ActivityIndicator } from "react-native";
 import { getAllPrestamosService } from "../../services/prestamos.services";
-import { SetPrestamos } from "../../redux/reducers/prestamoSlice";
+import {
+  SetPrestamos,
+  getAllPrestamosRedux,
+} from "../../redux/reducers/prestamoSlice";
 import { Link } from "expo-router";
 
 import { FontAwesome } from "@expo/vector-icons";
+import { ViewDollar } from "../../utils";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
-export function ViewDollar(strt: any) {
-  let USDollar = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "COP",
-  });
-
-  return USDollar.format(strt);
-}
 export default function TabOneScreen() {
-  const prestamos = useSelector((state: any) => state.prestamos);
+  const prestamos = useSelector((state: any) => state.prestamos.prestamos);
+  const loading = useSelector((state: any) => state.prestamos.loading);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    getPrestamos();
+    dispatch(getAllPrestamosRedux());
   }, []);
 
   const getPrestamos = async () => {
@@ -37,10 +36,20 @@ export default function TabOneScreen() {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.countContainer}>
-        <Text style={styles.countText}>Lista Prestamos </Text>
-      </View>
+      {loading && (
+        <View style={{ height: "90%" }}>
+          <ActivityIndicator
+            style={{ paddingTop: 150 }}
+            size="large"
+            color="#0A660F"
+          />
+        </View>
+      )}
       <FlatList
+        onRefresh={() => {
+          dispatch(getAllPrestamosRedux());
+        }}
+        refreshing={loading}
         data={prestamos}
         renderItem={({ item: prestam }) => (
           <View key={prestam} style={styles.card}>
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderColor: "#399DAF",
-    backgroundColor:"#EAFCFF",
+    backgroundColor: "#EAFCFF",
     borderWidth: 1,
     padding: 13,
     borderRadius: 11,

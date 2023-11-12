@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
+import Toast from 'react-native-toast-message';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,6 +55,7 @@ function RootLayoutNav() {
   return (
    /*  <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}> */
       <Provider store={store}>
+        <Toast />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" , headerTitle:"Crear Prestamo"}} />

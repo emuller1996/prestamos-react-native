@@ -7,13 +7,9 @@ import RNPickerSelect from "react-native-picker-select";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllClientesService } from "../services/clientes";
-import { SetClientes } from "../redux/reducers/clientSlice";
 
 export default function ModalScreen() {
-  const clientes = useSelector((state: any) => state.clientes.clientes);
-
-  const [options, setOptions] = useState([]);
-  const dispatch = useDispatch();
+  const [options, setOptions] = useState(null);
 
   useEffect(() => {
     getClientes();
@@ -22,7 +18,6 @@ export default function ModalScreen() {
   const getClientes = async () => {
     try {
       const r = await getAllClientesService();
-      dispatch(SetClientes(r.data.clientes));
       const s = r.data.clientes;
       setOptions(
         s.map((c: any) => {
@@ -36,16 +31,22 @@ export default function ModalScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
+      <Text style={styles.title}>Ingrese los datos del prestamos</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <RNPickerSelect
-        onValueChange={(value) => console.log(value)}
-        items={options}
-      />
+      {options && (
+        <>
+          <Text style={styles.label}>Ingrese los datos del prestamos</Text>
+
+          <RNPickerSelect
+            onValueChange={(value) => console.log(value)}
+            items={options}
+          />
+        </>
+      )}
     </View>
   );
 }
@@ -57,12 +58,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
   },
   separator: {
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "400",
+    paddingBottom:8
   },
 });

@@ -31,6 +31,8 @@ export const clientSlice = createSlice({
 
     builder.addCase(getAllClientesRedux.pending, (state, action) => {
       state.loading = true;
+      state.clientes = [];
+
     })
     builder.addCase(getAllClientesRedux.rejected, (state, action) => {
       state.loading = false;

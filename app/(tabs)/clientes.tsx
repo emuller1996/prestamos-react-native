@@ -2,7 +2,7 @@ import { Alert, Button, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
-import { FlatList } from "react-native";
+import { FlatList, ActivityIndicator } from "react-native";
 import axios from "axios";
 import { Link } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
@@ -15,23 +15,22 @@ import {
 } from "../../redux/reducers/clientSlice";
 import { getAllClientesService } from "../../services/clientes";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { ViewDollar } from "../../utils";
 export default function TabTwoScreen() {
   /* const [Clientes, setClientes] = useState(null); */
   const clientes = useSelector((state: any) => state.clientes.clientes);
+  const loading = useSelector((state: any) => state.clientes.loading);
 
   const [first, setfirst] = useState(false);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-
     dispatch(getAllClientesRedux());
-
   }, [first]);
 
   interface Cliente {
     nombre: string;
   }
-
 
   return (
     <View style={styles.container}>
@@ -41,16 +40,37 @@ export default function TabTwoScreen() {
       </Link>
 
       {/* <Text style={styles.title}>Tab Two</Text> */}
+
+      {loading && (
+        <View style={{ height: "100%" }}>
+          <ActivityIndicator
+            style={{ paddingTop: 150 }}
+            size="large"
+            color="#0A660F"
+          />
+        </View>
+      )}
       <FlatList
+        onRefresh={() => {
+          dispatch(getAllClientesRedux());
+        }}
+        refreshing={false}
         data={clientes}
         renderItem={({ item: clie }) => (
           <View key={clie.nombre} style={styles.card}>
-            <Text>{clie.nombre}</Text>
-            <Text>{clie.estado}</Text>
-            <Link style={styles.button} href={`/cliente/${clie.id}`}>
-              <FontAwesome name="pencil" size={25} />
-              <Text>Editar Cliente</Text>
-            </Link>
+            <View style={{ backgroundColor: "#E6FFE7", display: "flex" }}>
+              <Text style={styles.textCard}>{clie.nombre}</Text>
+              <Text style={styles.textCard}>{clie.estado}</Text>
+              <Text style={styles.textCard}>
+                {ViewDollar(clie.deuda_actual)}
+              </Text>
+            </View>
+            <View style={styles.button}>
+              <Link style={styles.link} href={`/cliente/${clie.id}`}>
+                <FontAwesome name="pencil" size={25} />
+                <Text style={{ color: "#EBEBEB" }}>Editar Cliente</Text>
+              </Link>
+            </View>
           </View>
         )}
       ></FlatList>
@@ -75,28 +95,28 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   card: {
-    borderColor: "#399DAF",
-    backgroundColor: "#EAFCFF",
+    borderColor: "#0A660F",
+    backgroundColor: "#E6FFE7",
     borderWidth: 1,
     padding: 9,
     borderRadius: 10,
     margin: 5,
   },
   button: {
-    backgroundColor: "#3095C4",
-    color: "#EDEDED",
+    backgroundColor: "#0A660F",
+    color: "#fff",
     borderRadius: 10,
     borderColor: "#0F73A1",
     borderStyle: "solid",
+    textAlign: "center",
     elevation: 3,
     display: "flex",
     alignItems: "center",
     justifyContent: "space-around",
-    borderWidth: 2,
     fontSize: 17,
     marginHorizontal: 5,
-    paddingVertical: 12,
-    paddingHorizontal: 32,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
   },
   cardContainer: {
     display: "flex",
@@ -105,5 +125,14 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: "flex-end",
     color: "#EDEDED",
+  },
+  textCard: {
+    fontSize: 18,
+    padding: 2,
+  },
+  link: {
+    width: "100%",
+    textAlign: "center",
+    color: "#EBEBEB",
   },
 });
