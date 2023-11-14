@@ -10,8 +10,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
-import Toast from 'react-native-toast-message';
-
+import Toast from "react-native-toast-message";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -53,19 +52,25 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-   /*  <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}> */
-      <Provider store={store}>
-        <Toast />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" , headerTitle:"Crear Prestamo"}} />
-          <Stack.Screen name="[idPrestamo]"  options={{ presentation: "modal" , headerTitle:"Detalle de Prestamo"}} />
-          <Stack.Screen
-            name="NuevoCliente"
-            options={{ presentation: "modal" }}
-          />
-        </Stack>
-      </Provider>
+    /*  <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}> */
+    <Provider store={store}>
+      <Toast />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="modal"
+          options={{ presentation: "modal", headerTitle: "Crear Prestamo" }}
+        />
+        <Stack.Screen
+          name="[idPrestamo]"
+          options={{
+            presentation: "modal",
+            headerTitle: "Detalle de Prestamo",
+          }}
+        />
+        <Stack.Screen name="NuevoCliente" options={{ presentation: "modal" }} />
+      </Stack>
+    </Provider>
     /* </ThemeProvider> */
   );
 }

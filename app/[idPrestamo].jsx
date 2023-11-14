@@ -65,6 +65,9 @@ export default function Page() {
           <FlatList
             style={{ minHeight: "40%" }}
             data={Prestamo.Pagos}
+            ListEmptyComponent={(<Text style={{textAlign:"center",marginTop:16, fontSize: 16 
+           
+           }}>No hay Pagos</Text>)}
             renderItem={({ item: prestam }) => (
               <>
                 <View

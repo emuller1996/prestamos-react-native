@@ -17,7 +17,11 @@ import { getAllClientesRedux } from "../redux/reducers/clientSlice";
 import Toast from "react-native-toast-message";
 import { putUpdateClientesService } from "../services/clientes";
 
-export default function FormClientes({ cliente }) {
+export default function FormClientes({
+  cliente,
+}: {
+  cliente: { nombre: string; numero_telefonico: string; id: number };
+}) {
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState("");
   const dispatch = useAppDispatch();
@@ -81,7 +85,7 @@ export default function FormClientes({ cliente }) {
             name="nombre"
           />
           {errors.nombre && (
-            <Text style={styles.textError}>{errors.nombre.message}</Text>
+            <Text style={styles.textError}>{errors?.nombre?.message}</Text>
           )}
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -131,7 +135,7 @@ export default function FormClientes({ cliente }) {
         /> */}
       </SafeAreaView>
 
-      <Toast visibilityTime={800} />
+      <Toast position="top" visibilityTime={800} />
     </View>
   );
 }

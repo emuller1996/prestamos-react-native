@@ -20,7 +20,6 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useForm, Controller } from "react-hook-form";
 import FormClientes from "../components/FormClientes";
 
-
 export default function NuevoClienteScreen() {
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState("");
@@ -40,11 +39,9 @@ export default function NuevoClienteScreen() {
   const onSubmit = async () => {
     console.log({ nombre: text, numero_telefonico: number });
 
-    
-
-      try {
-        ToastAndroid.show('A pikachu appeared nearby !',  ToastAndroid.SHORT);
-        /* const r = await axios.post(
+    try {
+      ToastAndroid.show("A pikachu appeared nearby !", ToastAndroid.SHORT);
+      /* const r = await axios.post(
           "https://prestamos-app-nextapp.vercel.app/api/clientes",
           {
             nombre: text,
@@ -53,10 +50,9 @@ export default function NuevoClienteScreen() {
         );
         Alert.alert("Cliente Registrado");
         dispatch(getAllClientesRedux()); */
-      } catch (error) {
-        console.log(error);
-      }
-    
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
