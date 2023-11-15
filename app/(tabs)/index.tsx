@@ -14,6 +14,7 @@ import { Link } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { ViewDollar } from "../../utils";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import Toast from "react-native-toast-message";
 
 export default function TabOneScreen() {
   const prestamos = useSelector((state: any) => state.prestamos.prestamos);
@@ -56,13 +57,15 @@ export default function TabOneScreen() {
             <Text>{prestam.cliente.nombre}</Text>
             <Text>{prestam.cliente.estado}</Text>
             <Text>{ViewDollar(prestam.cliente.deuda_actual)}</Text>
-            <Link style={styles.button} href={`/${prestam.id}`}>
+            <Link style={styles.button} href={`/${prestam.id}/page`}>
               <FontAwesome name="pencil" size={25} />
               <Text>Ver Prestamo</Text>
             </Link>
           </View>
         )}
       ></FlatList>
+      <Toast position="top" visibilityTime={800} />
+
     </View>
   );
 }

@@ -58,11 +58,15 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
-          name="modal"
+          name="CrearPrestamo"
           options={{ presentation: "modal", headerTitle: "Crear Prestamo" }}
         />
         <Stack.Screen
-          name="[idPrestamo]"
+          name="[idPrestamo]/CrearPago/page"
+          options={{ presentation: "modal", headerTitle: "Crear Pago" }}
+        />
+        <Stack.Screen
+          name="[idPrestamo]/page"
           options={{
             presentation: "modal",
             headerTitle: "Detalle de Prestamo",

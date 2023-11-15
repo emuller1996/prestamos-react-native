@@ -21,24 +21,30 @@ import { postCreatePrestamosService } from "../services/prestamos.services";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { getAllPrestamosRedux } from "../redux/reducers/prestamoSlice";
 import Toast from "react-native-toast-message";
+import { SelectList } from "react-native-dropdown-select-list";
+import CurrencyInput from "react-native-currency-input";
 
+import { useNavigation } from "expo-router";
 
 export default function ModalScreen() {
   const [options, setOptions] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState();
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState<any>(null);
   const [show, setShow] = useState(false);
+  const [selected, setSelected] = useState("");
   const dispatch = useAppDispatch();
+  const navi = useNavigation();
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
     reset,
   } = useForm({
     defaultValues: {
       fecha_pago: "",
-      valor_prestamo: "",
+      valor_prestamo: 0,
       clienteId: null,
     },
   });
@@ -55,12 +61,18 @@ export default function ModalScreen() {
   };
 
   const onSubmit = async (data: any) => {
-    data.valor_prestamo =parseInt(data.valor_prestamo)
-    data.clienteId =parseInt(data.clienteId)
+    data.valor_prestamo = parseInt(data.valor_prestamo);
+    data.clienteId = parseInt(data.clienteId);
+    if (data.fecha_pago === "") {
+      setError("fecha_pago", {
+        message: "Fecha de Pago Obligatoria",
+        type: "required",
+      });
+      return false;
+    }
     console.log(data);
     try {
       await postCreatePrestamosService(data);
-
       dispatch(getAllPrestamosRedux());
       reset();
 
@@ -68,19 +80,21 @@ export default function ModalScreen() {
         type: "success",
         text1: "Prestamo Creado",
       });
+      getClientes();
+      setDate(null);
     } catch (error) {
       console.log(error);
-      
     }
   };
 
   const getClientes = async () => {
     try {
+      setOptions(null);
       const r = await getAllClientesService();
       const s = r.data.clientes;
       setOptions(
         s.map((c: any) => {
-          return { label: c.nombre, value: c.id };
+          return { value: c.nombre, key: c.id };
         })
       );
     } catch (error) {
@@ -98,51 +112,61 @@ export default function ModalScreen() {
       />
       <View style={styles.form}>
         <View style={{ marginBottom: 16 }}>
-          <Text style={styles.label}>Fecha Pago </Text>
-          <SafeAreaView>
-            <Button
-              onPress={() => {
-                setShow(!show);
-              }}
-              title="Selecionar Fecha"
-            />
-            <Text>
-              Fecha Selecionada : {date.toLocaleString().substring(0, 10)}
-            </Text>
-            {show && (
+          <Text style={styles.label}>Cliente </Text>
+
+          {options && (
+            <>
               <Controller
                 control={control}
                 rules={{
-                  required: "cliente",
+                  required: "Cliente es Obligatorio.",
                 }}
-                render={({ field: { onBlur, value } }) => (
-                  <RNDateTimePicker
-                    onChange={onChangeS}
-                    value={date}
-                    mode="date"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <SelectList
+                    setSelected={(e: any) => setValue("clienteId", e)}
+                    data={options}
+                    save="key"
+                    searchPlaceholder="Selecione el Cliente"
+                    boxStyles={styles.input}
                   />
                 )}
-                name="fecha_pago"
+                name="clienteId"
               />
-            )}
-          </SafeAreaView>
+              {errors.clienteId && (
+                <Text style={styles.textError}>
+                  {errors?.clienteId?.message}
+                </Text>
+              )}
+            </>
+          )}
         </View>
         <View style={{ marginBottom: 16 }}>
           <Text style={styles.label}>Valor Prestamo </Text>
 
+          {/* <TextInput
+            keyboardType="numeric"
+            style={styles.input}
+            placeholder="600.000"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          /> */}
           <Controller
             control={control}
             rules={{
-              required: "Valor del Prestamo",
+              required: "Valor prestamo es Obligatorio.",
+              validate: (i) => {
+                if (i === 0) {
+                  return false || "Valor debe ser diferente a zero";
+                }
+              },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                keyboardType="numeric"
+              <CurrencyInput
                 style={styles.input}
-                placeholder="Valor del Prestamo"
-                onBlur={onBlur}
-                onChangeText={onChange}
+                precision={0}
                 value={value}
+                onChangeValue={onChange}
               />
             )}
             name="valor_prestamo"
@@ -153,8 +177,49 @@ export default function ModalScreen() {
             </Text>
           )}
         </View>
+        <View style={{ marginBottom: 16 }}>
+          <Text style={styles.label}>Fecha Pago </Text>
+          <SafeAreaView>
+            <TextInput
+              focusable={false}
+              style={styles.input}
+              placeholder="Ingrese la Fecha"
+              value={date && date.toISOString().substring(0, 10)}
+              onPressIn={() => {
+                setShow(!show);
+              }}
+            />
+            {/* <Button
+              onPress={() => {
+                setShow(!show);
+              }}
+              title="Selecionar Fecha"
+            /> */}
+            {/* <Text>
+              Fecha Selecionada : {date.toLocaleString().substring(0, 10)}
+            </Text> */}
+            {show && (
+              <>
+                <Controller
+                  control={control}
+                  render={({ field: { onBlur, value } }) => (
+                    <RNDateTimePicker
+                      onChange={onChangeS}
+                      value={date ? date : new Date()}
+                      mode="date"
+                    />
+                  )}
+                  name="fecha_pago"
+                />
+              </>
+            )}
+            {errors.fecha_pago && (
+              <Text style={styles.textError}>s{errors.fecha_pago.message}</Text>
+            )}
+          </SafeAreaView>
+        </View>
 
-        {options && (
+        {/*  {options && (
           <>
             <Text style={styles.label}>Selecione Cliente</Text>
 
@@ -173,23 +238,15 @@ export default function ModalScreen() {
               name="clienteId"
             />
           </>
-        )}
+        )} */}
 
         <TouchableWithoutFeedback onPress={handleSubmit(onSubmit)}>
-          <View
-            style={{
-              marginTop: 32,
-              borderColor: "red",
-              borderWidth: 1,
-              padding: 16,
-            }}
-          >
-            <Text style={{ textAlign: "center" }}> Guardar</Text>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}> Guardar</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
       <Toast position="top" visibilityTime={800} />
-
     </View>
   );
 }
@@ -198,6 +255,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    backgroundColor: "#F9F4FF",
   },
   title: {
     fontSize: 16,
@@ -212,23 +270,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
     paddingBottom: 8,
+    backgroundColor: "#F9F4FF",
   },
   form: {
-    width: "80%",
+    width: "86%",
+    backgroundColor: "#F9F4FF",
   },
   textError: {
-    color: "#78281F",
-    backgroundColor: "#F1FFF1",
+    color: "#CA2A62",
     fontSize: 16,
     paddingLeft: 16,
+    textAlign: "center",
+    backgroundColor: "#F9F4FF",
   },
   input: {
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: "#025504",
+    borderColor: "#A067D9",
     fontSize: 18,
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 9,
     color: "#025504",
+    backgroundColor: "#FBFBFB",
+    overflow: "hidden",
+  },
+  button: {
+    backgroundColor: "#774CA1",
+    color: "#E8E1EF",
+    borderRadius: 9,
+    borderWidth: 1,
+    paddingVertical: 8,
+  },
+  buttonText: {
+    color: "#E8E1EF",
+    textAlign: "center",
+    paddingVertical: 6,
   },
 });

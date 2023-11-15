@@ -10,7 +10,6 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
-  ToastAndroid,
   TouchableWithoutFeedback,
 } from "react-native";
 import { useDispatch } from "react-redux";
@@ -40,7 +39,6 @@ export default function NuevoClienteScreen() {
     console.log({ nombre: text, numero_telefonico: number });
 
     try {
-      ToastAndroid.show("A pikachu appeared nearby !", ToastAndroid.SHORT);
       /* const r = await axios.post(
           "https://prestamos-app-nextapp.vercel.app/api/clientes",
           {

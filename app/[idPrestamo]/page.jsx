@@ -1,9 +1,11 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, StyleSheet, FlatList } from "react-native";
-import { getAllPrestamosByIdService } from "../services/prestamos.services";
-import { View } from "../components/Themed";
-import { ViewDollar } from "../utils";
+import { getAllPrestamosByIdService } from "../../services/prestamos.services";
+import { View } from "../../components/Themed";
+import { ViewDollar } from "../../utils";
+import { Link } from "expo-router";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function Page() {
   const { idPrestamo } = useLocalSearchParams();
@@ -45,11 +47,15 @@ export default function Page() {
       />
       <View style={styles.card}>
         <Text style={{ textAlign: "center", fontSize: 20 }}>Pagos </Text>
+        <Link style={styles.button} href={`/${idPrestamo}/CrearPago/page`}>
+          <FontAwesome s name="pencil" size={25} />
+          <Text style={{ textAlign: "center" }}>Crear Pago</Text>
+        </Link>
         <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+          style={styles.separator}
+          lightColor="#eee"
+          darkColor="rgba(255,255,255,0.1)"
+        />
         <View
           style={{
             display: "flex",
@@ -65,9 +71,13 @@ export default function Page() {
           <FlatList
             style={{ minHeight: "40%" }}
             data={Prestamo.Pagos}
-            ListEmptyComponent={(<Text style={{textAlign:"center",marginTop:16, fontSize: 16 
-           
-           }}>No hay Pagos</Text>)}
+            ListEmptyComponent={
+              <Text
+                style={{ textAlign: "center", marginTop: 16, fontSize: 16 }}
+              >
+                No hay Pagos
+              </Text>
+            }
             renderItem={({ item: prestam }) => (
               <>
                 <View
@@ -123,5 +133,11 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     alignItems: "center",
+  },
+  button: {
+    borderWidth: 1,
+    width: "99%",
+    borderRadius: 9,
+    padding: 6,
   },
 });

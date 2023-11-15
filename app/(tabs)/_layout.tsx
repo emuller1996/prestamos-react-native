@@ -29,7 +29,7 @@ export default function TabLayout() {
           title: 'Prestamos',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/CrearPrestamo" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
