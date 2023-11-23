@@ -19,7 +19,6 @@ export default function Page() {
   const getPrestamoById = async () => {
     try {
       const t = await getAllPrestamosByIdService(idPrestamo);
-      console.log(t.data.prestamo);
       setPrestamo(t.data.prestamo);
     } catch (error) {
       console.log(error);
@@ -76,7 +75,7 @@ export default function Page() {
         <View
           style={{
             display: "flex",
-            marginTop:16,
+            marginTop: 16,
             flexDirection: "row",
             gap: 16,
             justifyContent: "space-around",
@@ -107,9 +106,9 @@ export default function Page() {
                 <View
                   key={prestam}
                   style={{
-                    display: "flex",
                     flexDirection: "row",
-                    gap: 16,
+                    gap: 8,
+
                     justifyContent: "space-around",
                     backgroundColor: "transparent",
                   }}

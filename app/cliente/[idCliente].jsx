@@ -15,7 +15,6 @@ export default function Page() {
   const getClientById = async () => {
     try {
       const t = await getClientesByIdService(idCliente);
-      console.log(t.data);
       setCliente(t.data);
     } catch (error) {}
   };

@@ -1,5 +1,5 @@
 import axios from "axios";
-axios.defaults.baseURL = `http://192.168.0.6:3001`
+axios.defaults.baseURL = `http://18.231.180.169:3035`
 export const getAllClientesService = async () => {
   return await axios.get(`/clientes`, {
     /* headers: {
