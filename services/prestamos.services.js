@@ -1,8 +1,8 @@
 import axios from "axios";
-
+axios.defaults.baseURL = `http://192.168.0.6:3001`
 export const getAllPrestamosService = async () => {
   return await axios.get(
-    `https://prestamos-app-nextapp.vercel.app/api/prestamos`,
+    `/prestamos`,
     {
       /* headers: {
         Authorization: `Bearer ${token}`,
@@ -12,7 +12,7 @@ export const getAllPrestamosService = async () => {
 };
 export const getAllPrestamosByIdService = async (id) => {
   return await axios.get(
-    `https://prestamos-app-nextapp.vercel.app/api/prestamos/${id}/`,
+    `/prestamos/${id}/`,
     {
       /* headers: {
         Authorization: `Bearer ${token}`,
@@ -23,7 +23,7 @@ export const getAllPrestamosByIdService = async (id) => {
 
 export const postCreatePrestamosService = async (data) => {
   return await axios.post(
-    `https://prestamos-app-nextapp.vercel.app/api/prestamos`,
+    `/prestamos`,
     data,
     {
       /* headers: {
@@ -34,7 +34,7 @@ export const postCreatePrestamosService = async (data) => {
 };
 export const postCreatePagoPorPrestamosService = async (data) => {
   return await axios.post(
-    `https://prestamos-app-nextapp.vercel.app/api/prestamos/${data.prestamoId}/pagos`,
+    `/prestamos/${data.prestamoId}/pagos`,
     data,
     {
       /* headers: {

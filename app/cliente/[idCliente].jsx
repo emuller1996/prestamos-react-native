@@ -15,14 +15,14 @@ export default function Page() {
   const getClientById = async () => {
     try {
       const t = await getClientesByIdService(idCliente);
-      console.log(t.data.clientes);
-      setCliente(t.data.clientes);
+      console.log(t.data);
+      setCliente(t.data);
     } catch (error) {}
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Editar Cliete</Text>
+      <Text style={styles.title}>Editar Cliente</Text>
       {cliente && <FormClientes cliente={cliente} />}
     </View>
   );

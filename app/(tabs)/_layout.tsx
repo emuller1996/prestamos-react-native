@@ -27,7 +27,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Prestamos',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ticket" color={color} />,
           headerRight: () => (
             <Link href="/CrearPrestamo" asChild>
               <Pressable>
@@ -48,14 +48,14 @@ export default function TabLayout() {
         name="clientes"
         options={{
           title: 'Clientes',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
       />
       <Tabs.Screen
         name="pagos"
         options={{
           title: 'Pagos',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="dollar" color={color} />,
         }}
       />
       

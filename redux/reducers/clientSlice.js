@@ -6,8 +6,10 @@ export const getAllClientesRedux = createAsyncThunk(
   async (s) => {
     try {
       const t = await getAllClientesService();
-      return t.data.clientes;
-    } catch (error) {}
+      return t.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 

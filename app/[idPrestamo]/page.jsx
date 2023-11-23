@@ -30,6 +30,7 @@ export default function Page() {
     <View style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.text}>Cliente: {Prestamo?.cliente.nombre}</Text>
+
         <Text style={styles.text}>
           Deuda Actual: {ViewDollar(Prestamo?.deuda_actual)}
         </Text>
@@ -37,31 +38,49 @@ export default function Page() {
           Pago Interes: {ViewDollar(Prestamo?.pago_interes)}
         </Text>
         <Text style={styles.text}>
-          Valor del Prestamo: {Prestamo?.fecha_pago.substring(0, 10)}
+          Valor del Prestamo: {ViewDollar(Prestamo?.valor_prestamo)}
         </Text>
+        <Text style={styles.text}>
+          Fecha del Prestamo: {Prestamo?.createdAt.substring(0, 10)}
+        </Text>
+        <Text style={styles.text}>
+          Fecha del Pago: {Prestamo?.fecha_pago.substring(0, 10)}
+        </Text>
+        <Text style={styles.estado}>{Prestamo?.estado}</Text>
       </View>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+
       <View style={styles.card}>
-        <Text style={{ textAlign: "center", fontSize: 20 }}>Pagos </Text>
-        <Link style={styles.button} href={`/${idPrestamo}/CrearPago/page`}>
-          <FontAwesome s name="pencil" size={25} />
-          <Text style={{ textAlign: "center" }}>Crear Pago</Text>
-        </Link>
-        <View
+        <Text
+          style={{ ...styles.text, textAlign: "center", marginVertical: 8 }}
+        >
+          Pagos{" "}
+        </Text>
+        <View style={styles.button}>
+          <Link style={styles.text} href={`/${idPrestamo}/CrearPago/page`}>
+            <FontAwesome style={{ color: "#ffefe5" }} name="dollar" size={25} />
+            <Text
+              style={{
+                fontSize: 20,
+                color: "#ffefe5",
+              }}
+            >
+              Crea Pago
+            </Text>
+          </Link>
+        </View>
+        {/* <View
           style={styles.separator}
           lightColor="#eee"
           darkColor="rgba(255,255,255,0.1)"
-        />
+        /> */}
         <View
           style={{
             display: "flex",
+            marginTop:16,
             flexDirection: "row",
             gap: 16,
             justifyContent: "space-around",
+            backgroundColor: "transparent",
           }}
         >
           <Text style={styles.text}>Fecha</Text>
@@ -92,6 +111,7 @@ export default function Page() {
                     flexDirection: "row",
                     gap: 16,
                     justifyContent: "space-around",
+                    backgroundColor: "transparent",
                   }}
                 >
                   <Text style={styles.text}>
@@ -113,31 +133,47 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "stretch",
     padding: 16,
+    backgroundColor: "#ffefe5",
   },
   text: {
     fontSize: 18,
     fontWeight: "400",
-    color: "#767676",
+    color: "#9b5005",
   },
   card: {
     marginTop: 32,
     padding: 16,
     borderWidth: 0.8,
-    borderColor: "#909090",
+    borderColor: "#fd8813",
+    backgroundColor: "#fff7f2",
     borderRadius: 16,
   },
   separator: {
     marginVertical: 8,
-    height: 1,
+    height: 2,
     width: "100%",
+    backgroundColor: "#ffd4a9",
     alignItems: "center",
   },
   button: {
-    borderWidth: 1,
-    width: "99%",
+    borderWidth: 2,
+    borderColor: "#ffcb96",
+    backgroundColor: "#ff8437",
+    color: "#ffeee3",
     borderRadius: 9,
-    padding: 6,
+    padding: 8,
+    justifyContent: "center",
+  },
+  estado: {
+    borderWidth: 2,
+    borderColor: "#ffcb96",
+    backgroundColor: "#ff8437",
+    fontSize: 20,
+    borderRadius: 8,
+    color: "#fcf1e7",
+    marginVertical: 10,
+    overflow: "hidden",
+    textAlign: "center",
   },
 });

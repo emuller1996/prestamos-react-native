@@ -15,7 +15,10 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useForm, Controller } from "react-hook-form";
 import { getAllClientesRedux } from "../redux/reducers/clientSlice";
 import Toast from "react-native-toast-message";
-import { putUpdateClientesService } from "../services/clientes";
+import {
+  postCreateClientesService,
+  putUpdateClientesService,
+} from "../services/clientes";
 
 export default function FormClientes({
   cliente,
@@ -29,6 +32,7 @@ export default function FormClientes({
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -47,15 +51,13 @@ export default function FormClientes({
       });
     } else {
       try {
-        const r = await axios.post(
-          "https://prestamos-app-nextapp.vercel.app/api/clientes",
-          data
-        );
+        const r = await postCreateClientesService(data);
         Toast.show({
           type: "success",
           text1: "Cliente Creado",
         });
         dispatch(getAllClientesRedux());
+        reset()
       } catch (error) {
         console.log(error);
       }

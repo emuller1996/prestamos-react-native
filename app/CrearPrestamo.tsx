@@ -91,7 +91,7 @@ export default function ModalScreen() {
     try {
       setOptions(null);
       const r = await getAllClientesService();
-      const s = r.data.clientes;
+      const s = r.data;
       setOptions(
         s.map((c: any) => {
           return { value: c.nombre, key: c.id };
